@@ -1,46 +1,39 @@
 package com.bhavdip.SpringWebApp.service;
 
 import com.bhavdip.SpringWebApp.model.Product;
+import com.bhavdip.SpringWebApp.repository.ProductRepo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
+
+    @Autowired
+    ProductRepo repo;
     //Arrays.asList  make it immutable
-    List<Product> products = new ArrayList<>(Arrays.asList(new Product(101,"Shampoo",20),new Product(102,"Soap",30))) ;
+//    List<Product> products = new ArrayList<>(Arrays.asList(new Product(101,"Shampoo",20),new Product(102,"Soap",30))) ;
 
     public List<Product> getProducts() {
-        return this.products;
+        return repo.findAll();
     }
 
     public Product getProductById(int prodId) {
-        return products.stream().filter(s -> s.getProdId() == prodId).findFirst().orElse(new Product(105,"Biscuit",10));
+        return repo.findById(prodId).orElse(new Product(999,"dummy",100));
     }
 
     public void addProduct(Product product) {
-        this.products.add(product);
+        repo.save(product);
     }
 
     public void updateProduct(Product product,int prodId) {
-        for (int i = 0; i < products.size(); i++) {
-            if (products.get(i).getProdId() == prodId) {
-                products.set(i, product); // Update product in place
-                return; // Exit early once found
-            }
-        }
+        repo.save(product); // update if exist other wise create
     }
 
     public void deleteProduct(int prodId) {
-        for (int i = 0; i < products.size(); i++) {
-            if (products.get(i).getProdId() == prodId) {
-                products.remove(i); // Update product in place
-                return; // Exit early once found
-            }
-        }
+        repo.deleteById(prodId);
     }
 }
