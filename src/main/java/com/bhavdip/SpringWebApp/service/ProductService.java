@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -23,5 +24,23 @@ public class ProductService {
 
     public void addProduct(Product product) {
         this.products.add(product);
+    }
+
+    public void updateProduct(Product product,int prodId) {
+        for (int i = 0; i < products.size(); i++) {
+            if (products.get(i).getProdId() == prodId) {
+                products.set(i, product); // Update product in place
+                return; // Exit early once found
+            }
+        }
+    }
+
+    public void deleteProduct(int prodId) {
+        for (int i = 0; i < products.size(); i++) {
+            if (products.get(i).getProdId() == prodId) {
+                products.remove(i); // Update product in place
+                return; // Exit early once found
+            }
+        }
     }
 }
